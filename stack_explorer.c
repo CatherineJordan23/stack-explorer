@@ -36,7 +36,23 @@ int max_depth = 0;
 //   Returning from factorial(2) = 2
 //   Returning from factorial(3) = 6
 
+int factorial(int n) {
+    printf("Entering factorial(%d)\n");
 
+    // Base case
+    if (n <= 1) {
+        printf("Base case reached\n");
+        printf("Returning from factorial(%d) = 1\n", n);
+        return 1;
+    }
+
+    // Recursive call
+    int result = n * factorial(n-1);
+
+    printf("Returning from factorial(%d) = %d\n", n, result);
+
+    return result;
+}
 
 
 
@@ -58,7 +74,25 @@ int max_depth = 0;
 // Hint: int fibonacci(int n, int depth) { ... }
 // The depth parameter tracks how many levels deep we are in recursion
 
+//Recursive Fibonacci function with depth tracking
+int fibonacci(int n, int depth) {
 
+    // Update maximum depth
+    if(depth > max_depth) {
+        max_depth = depth;
+    }
+
+    // Print current depth and n
+    printf("Depth %d: fibonacci(%d)\n", depth, n);
+
+    // Base case
+    if (n <= 1) {
+        return n;
+    }
+
+    // Recursive calls
+    return fibonacci(n - 1, depth + 1) + fibonacci(n - 2, depth + 1);
+}
 
 
 
@@ -78,6 +112,13 @@ int max_depth = 0;
 // This will crash! That's intentional - you'll observe what stack overflow looks like.
 // Hint: void infinite_recursion(int n) { ... }
 
+// Infinite recursion - this will eventually cause stack overflow
+// void infinite_recursion(int n) {
+    // printf("call %d\n", n);
+
+    // No base case
+    // infinite_recursion(n + 1);
+// }
 
 
 
@@ -92,7 +133,19 @@ int max_depth = 0;
 // This version has a proper base case and won't overflow.
 // Hint: void safe_recursion(int n, int max_depth) { ... }
 
+// Safe version of recursion
+void safe_recursion(int n, int max_depth) {
+    printf("call %d\n", n);
+    
+    // Base case
+    if (n >= max_depth) {
+        printf("Stopping at max depth\n");
+        return;
+    }
 
+    // Recursive call
+    safe_recursion(n + 1, max_depth);
+}
 
 
 
@@ -110,7 +163,20 @@ int max_depth = 0;
 //
 // Hint: int double_value(int n) { return n * 2; }
 
+// Double the value
+int double_value(int n) {
+    return n * 2;
+}
 
+// Square the value
+int sqaure_value(int n) {
+    return n * n;
+}
+
+// Negate the value
+int negate_value(int n) {
+    return -n;
+}
 
 
 
@@ -126,7 +192,13 @@ int max_depth = 0;
 // Hint: void process_array(int* arr, int size, int (*callback)(int)) { ... }
 // Example: process_array(arr, 5, double_value); applies double_value to each element
 
-
+// Process an array using a callback function
+void process_array(int* arr, int size, int (*callback)(int)) {
+    for (int i = 0; i < size; i++) {
+        int result = callback(arr[i]);
+        printf("%d -> %d\n", arr[i], result);
+    }
+}
 
 
 
@@ -153,6 +225,14 @@ typedef struct EventSystem {
 //
 // Hint: void event_system_init(EventSystem* es) { ... }
 
+// initialize event system
+void event_system_init(EventSystem* es) {
+    es->callback_count = 0;
+
+    for (int i = 0; i < MAX_CALLBACKS; i++) {
+        es->callbacks[i] = NULL;
+    }
+}
 
 
 
@@ -166,7 +246,18 @@ typedef struct EventSystem {
 //
 // Hint: void event_system_register(EventSystem* es, void (*callback)(int)) { ... }
 
+// Register a callback
+void event_system_register(EventSystem* es, void (*callback)(int)) {
 
+    if (es->callback_count < MAX_CALLBACKS) {
+        es->callbacks[es->callback_count] = callback;
+        es->callback_count++;
+
+        printf("Callback registered\n");
+    } else {
+        printf("Max callbacks reached\n");
+    }
+}
 
 
 
@@ -179,7 +270,15 @@ typedef struct EventSystem {
 //
 // Hint: void event_system_trigger(EventSystem* es, int value) { ... }
 
+void event_system_trigger(EventSystem* es, int event_value) {
 
+    printf("Triggering %d callbacks with value %d\n",
+           es->callback_count, event_value);
+
+    for (int i = 0; i < es->callback_count; i++) {
+        es->callbacks[i](event_value);
+    }
+}
 
 
 
@@ -216,32 +315,80 @@ int main() {
     
     printf("\n--- Part 1: Factorial with Stack Visualization ---\n");
     // TODO: Call factorial and print result
-    
+    int factorial_result = factorial(5);
+
+    printf("Factorial result: %d\n", factorial_result);
     
     printf("\n--- Part 2: Fibonacci with Depth Tracking ---\n");
     // TODO: Call fibonacci multiple times and track max_depth
     
-    
+    max_depth = 0;
+    int fib2 = fibonacci(2, 0);
+
+    printf("Fibonacci(2) = %d\n", fib2);
+    printf("Maximum recursion depth: %d\n", max_depth);
+
+    max_depth = 0;
+    int fib3 = fibonacci(3, 0);
+
+    printf("Fibonacci(3) = %d\n", fib3);
+    printf("Maximum recursion depth: %d\n", max_depth);
+
+    max_depth = 0;
+    int fib4 = fibonacci(4, 0);
+
+    printf("Fibonacci(4) = %d\n", fib4);
+    printf("Maximum recursion depth: %d\n", max_depth);
     
     printf("\n--- Part 3: Stack Overflow Demo (comment out after testing!) ---\n");
     // TODO: Call infinite_recursion (will crash - that's expected)
     // printf("Attempting infinite recursion...\n");
     // infinite_recursion(0);  // WILL CRASH - comment out after observing!
     
+    
     printf("\n--- Part 3: Safe Recursion (Fixed Version) ---\n");
     // TODO: Call safe_recursion with a reasonable max depth
-    
+    safe_recursion(0,5);
     
     printf("\n--- Part 4: Function Pointers and Callbacks ---\n");
     // TODO: Create array and test with different callbacks
     
-    
+    int numbers[] = {1, 2, 3, 4, 5};
+    int size = 5;
+
+    printf("\nDouble values:\n");
+    process_array(numbers, size, double_value);
+
+    printf("\nSquare values:\n");
+    process_array(numbers, size, sqaure_value);
+
+    printf("\nNegated values:\n");
+    process_array(numbers, size, negate_value);
     
     
     printf("\n--- Part 5: Event System ---\n");
     // TODO: Initialize event system, register callbacks, trigger events
     
-    
+    EventSystem event_system;
+
+    // Initialize event system
+    event_system_init(&event_system);
+
+    // Register callbacks
+    event_system_register(&event_system, on_score_update);
+    event_system_register(&event_system, on_level_change);
+    event_system_register(&event_system, on_health_change);
+
+    // Trigger events
+    printf("\nTriggering score event:\n");
+    event_system_trigger(&event_system, 100);
+
+    printf("\nTriggering level event:\n");
+    event_system_trigger(&event_system, 5);
+
+    printf("\nTriggering health event:\n");
+    event_system_trigger(&event_system, 75);
+
     
     
     printf("\n=============================================================\n");
