@@ -1,0 +1,48 @@
+Stack Mechanics 
+
+When I ran the recursive factorial function, I could see the stack growing as 
+each function call was made. For example, when calculating factorial(5), the 
+program entered factorial(5), then factorial(4), factorial(3), factorial(2), and 
+finally factorial(1). Once it rached the base case, the stack started to shrink as 
+each function returned its result. The print statements made thus easy to see 
+because the "Entering" message showed the calls going down, while the 
+"Returning" messages showed them coming back up. The Fibonacci function 
+worked in a similar way, but it made multiple recursive calls for each value. The 
+stack overflow demonstration was designed to keep calling the function 
+without a base case, which eventually causes the program to run out of stack 
+space and crash. The exact message can depend on the compiler or 
+operating system. Each function call creates a stack frame that stores 
+information needed for that call, including the function's parameters, return 
+address, and local variables. Once the function finished, that stack frame is 
+removed. 
+
+Recursion Costs
+
+Factorial and Fibonacci both use recursion, but Fibonacci can create much more 
+work because it makes two recursive calls for most values. In my testing, 
+factorial(5) went down one path from 5 to 1, while Fibonacci repeatedly 
+branched into additional calls. My Fibonacci tests with 2, 3, and 4 showed the 
+recursion depth increasing as the input increased. Because Fibonacci ,ales 
+calls to both n-1 and n-1, many function calls are created before the calculation 
+is finished. This means more stack frames can be active during the process and 
+makes Fibonacci more expensive than factorial. Python limits recursion depth to 
+prevent programs from continuously creating stack frames and using all of the 
+available stack memory. Without a limit, excessive recursion could eventually 
+cause a stack overflow, similar to the infinite recursion demonstration in this 
+assignment. The limit helps prevent this from happening.
+
+Function Pointers and Callbacks
+
+Function pointers allow a function to be passed to another function as a 
+parameter. In my program, the process_array function accepts a callback and 
+uses it on every value in an array. This makes the same process_array function 
+more flexible because i can pass double_value, square_value, or negate_value 
+without having to write a separate array-processing function for each 
+operation. A real-world example of callbacks is a GUI event handler. For 
+example, when a user clicks a button, a callback function can be called to 
+respond to that event. Systems programmers may use callbacks because they 
+allow programs to be more flexible and customizable. A program can decide 
+which function should run based on an event or situation instead of hard- 
+coding one specific function. Even though function pointers can be harder to 
+read than direct function calls, they are useful when designing systems that 
+need to respond to different events or behaviors. 
